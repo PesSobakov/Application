@@ -6,7 +6,7 @@ namespace Application.Server.Models.Validation
     public class StringDtoValidator:AbstractValidator<StringDto>
     {
        public StringDtoValidator() {
-            RuleFor(stringDto => stringDto.value).NotNull();
+            RuleFor(stringDto => stringDto.Value).NotNull();
         }
     }
 }

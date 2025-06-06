@@ -13,7 +13,7 @@ using Application.Server.Models.DTOs.GetBooking;
 
 namespace Application.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     [EnableCors("OpenCORSPolicy")]
     public class BookingController : ControllerBase
@@ -32,7 +32,6 @@ namespace Application.Server.Controllers
         }
 
         [HttpPost]
-        [ActionName("booking")]
         public async Task<IActionResult> CreateBooking([FromBody] CreateBookingDto createBookingDto)
         {
             string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();
@@ -61,7 +60,7 @@ namespace Application.Server.Controllers
                         Dictionary<string, string> errors = new();
                         int counter = 1;
                         response.ErrorMessages.ForEach(error => errors.Add("error" + counter++.ToString(), error));
-                        return BadRequest();
+                        return BadRequest(new ValidationError(errors));
                     }
                     else return BadRequest();
                 default:
@@ -70,7 +69,6 @@ namespace Application.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ActionName("booking")]
         public async Task<IActionResult> DeleteBooking(int id)
         {
             string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();
@@ -93,7 +91,6 @@ namespace Application.Server.Controllers
         }
 
         [HttpPatch("{id}")]
-        [ActionName("booking")]
         public async Task<IActionResult> EditBooking(int id, [FromBody] EditBookingDto editBoardDto)
         {
             //pretend this booking not exist when looking for awiolability
@@ -123,7 +120,7 @@ namespace Application.Server.Controllers
                         Dictionary<string, string> errors = new();
                         int counter = 1;
                         response.ErrorMessages.ForEach(error => errors.Add("error" + counter++.ToString(), error));
-                        return BadRequest();
+                        return BadRequest(new ValidationError(errors));
                     }
                     else return BadRequest();
                 default:
@@ -133,7 +130,6 @@ namespace Application.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [ActionName("booking")]
         public async Task<IActionResult> GetBooking(int id)
         {
             string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();
@@ -158,7 +154,6 @@ namespace Application.Server.Controllers
         }
 
         [HttpGet]
-        [ActionName("booking")]
         public async Task<IActionResult> GetBookings()
         {
             string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();

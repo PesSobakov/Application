@@ -36,8 +36,8 @@ namespace Application.Server.Controllers
             string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();
             if (login == null)
             {
-                login = "test@gmail.com";
-                var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, "test@gmail.com") };
+                login = "user@example.com";
+                var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, login) };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
@@ -48,7 +48,7 @@ namespace Application.Server.Controllers
             {
                 case ResponseStatus.Ok:
                     string user = response.Data!.Email;
-                    return Ok(new StringDto() { value = user });
+                    return Ok(new StringDto() { Value = user });
                 default:
                     return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -73,6 +73,20 @@ namespace Application.Server.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(claimsPrincipal);
+                    return Ok(user);
+                default:
+                    return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [ActionName("seed")]
+        public async Task<IActionResult> Seed()
+        {
+            var response = await _coworkingDatabaseService.Seed();
+            switch (response.Status)
+            {
+                case ResponseStatus.Ok:
                     return Ok();
                 default:
                     return StatusCode((int)HttpStatusCode.InternalServerError);

@@ -75,7 +75,9 @@ namespace Application.Server.Services
                     .FirstOrDefaultAsync();
             if (user == null) { return new ServiceResponse() { Status = ResponseStatus.Unauthorized }; }
 
-            DateOnly currentDate = DateOnly.FromDateTime(_timeProvider.Now());
+            DateTime currentDatetime = _timeProvider.Now();
+            DateOnly currentDate = DateOnly.FromDateTime(currentDatetime);
+            TimeOnly currentTime = TimeOnly.FromDateTime(currentDatetime);
             if (createBookingDto.StartDate < currentDate)
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Start date must be in future"] };
@@ -88,11 +90,15 @@ namespace Application.Server.Services
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["End time must be after start time"] };
             }
+            if (createBookingDto.StartDate == currentDate && createBookingDto.StartTime < currentTime)
+            {
+                return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Start time must be in future"] };
+            }
             if (createBookingDto.WorkspaceType == WorkspaceType.MeetingRoom && createBookingDto.StartDate != createBookingDto.EndDate)
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Meeting room can be booked only for 1 day"] };
             }
-            else if (createBookingDto.EndDate.CompareTo(createBookingDto.StartDate) > 30)
+            else if (createBookingDto.EndDate.CompareTo(createBookingDto.StartDate) > 30-1)
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Maximum booking time is 30 days"] };
             }
@@ -121,7 +127,7 @@ namespace Application.Server.Services
                     .Where(workspace => workspace.WorkspaceType == createBookingDto.WorkspaceType)
                     .ToListAsync();
                 workspace = workspaceCandidates
-                    .Where(workspace => workspace.Capacity - workspace.Bookings.Where(booking => !((booking.EndDate <= createBookingDto.StartDate) || (booking.StartDate >= createBookingDto.EndDate))).Count() >= createBookingDto.Seats)
+                    .Where(workspace => workspace.Capacity - workspace.Bookings.Where(booking => !((booking.EndDate < createBookingDto.StartDate) || (booking.StartDate > createBookingDto.EndDate))).Count() >= createBookingDto.Seats)
                     .OrderByDescending(workspace => workspace.Bookings.Where(booking => booking.StartDate > createBookingDto.StartDate).Count())
                     .FirstOrDefault();
             }
@@ -133,7 +139,7 @@ namespace Application.Server.Services
                     .Where(workspace => workspace.Capacity == createBookingDto.Seats)
                     .ToListAsync();
                 workspace = workspaceCandidates
-                    .Where(workspace => !workspace.Bookings.Where(booking => !((booking.EndDate <= createBookingDto.StartDate) || (booking.StartDate >= createBookingDto.EndDate))).Any())
+                    .Where(workspace => !workspace.Bookings.Where(booking => !((booking.EndDate < createBookingDto.StartDate) || (booking.StartDate > createBookingDto.EndDate))).Any())
                     .OrderByDescending(workspace => workspace.Bookings.Where(booking => booking.StartDate > createBookingDto.StartDate).Count())
                     .FirstOrDefault();
             }
@@ -196,7 +202,9 @@ namespace Application.Server.Services
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Booking not exists"] };
             }
 
-            DateOnly currentDate = DateOnly.FromDateTime(_timeProvider.Now());
+            DateTime currentDatetime = _timeProvider.Now();
+            DateOnly currentDate = DateOnly.FromDateTime(currentDatetime);
+            TimeOnly currentTime = TimeOnly.FromDateTime(currentDatetime);
             if (editBookingDto.StartDate < currentDate)
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Start date must be in future"] };
@@ -208,6 +216,10 @@ namespace Application.Server.Services
             if (editBookingDto.EndTime <= editBookingDto.StartTime)
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["End time must be after start time"] };
+            }
+            if (editBookingDto.StartDate == currentDate && editBookingDto.StartTime < currentTime)
+            {
+                return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Start time must be in future"] };
             }
             if (editBookingDto.WorkspaceType == WorkspaceType.MeetingRoom && editBookingDto.StartDate != editBookingDto.EndDate)
             {
@@ -243,7 +255,7 @@ namespace Application.Server.Services
                     .ToListAsync();
                 workspace = workspaceCandidates
                     .Where(workspace => workspace.Capacity - workspace.Bookings
-                        .Where(booking => !((booking.EndDate <= editBookingDto.StartDate) || (booking.StartDate >= editBookingDto.EndDate)))
+                        .Where(booking => !((booking.EndDate < editBookingDto.StartDate) || (booking.StartDate > editBookingDto.EndDate)))
                         .Where(booking => booking.Id != oldBooking.Id)
                         .Count() >= editBookingDto.Seats)
                     .OrderByDescending(workspace => workspace.Bookings.Where(booking => booking.StartDate > editBookingDto.StartDate).Count())
@@ -258,7 +270,7 @@ namespace Application.Server.Services
                     .ToListAsync();
                 workspace = workspaceCandidates
                     .Where(workspace => !workspace.Bookings
-                        .Where(booking => !((booking.EndDate <= editBookingDto.StartDate) || (booking.StartDate >= editBookingDto.EndDate)))
+                        .Where(booking => !((booking.EndDate < editBookingDto.StartDate) || (booking.StartDate > editBookingDto.EndDate)))
                         .Where(booking => booking.Id != oldBooking.Id)
                         .Any())
                     .OrderByDescending(workspace => workspace.Bookings.Where(booking => booking.StartDate > editBookingDto.StartDate).Count())
@@ -327,7 +339,7 @@ namespace Application.Server.Services
 
             return new ServiceResponse<List<Booking>>()
             {
-                Data = user.Bookings,
+                Data = bookings,
                 Status = ResponseStatus.Ok
             };
         }

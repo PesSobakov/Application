@@ -1,0 +1,251 @@
+<div class="flex flex-col p-20 gap-10">
+    <div class="flex flex-row gap-1">
+        <img class="size-6" src="assets\chevron-left.svg" />
+        <div class="text-blue-500" routerLink="/coworking-details" routerLinkActive="active">Go back</div>
+    </div>
+    <div class="text-4xl">Edit your booking</div>
+    @if(error==undefined){
+    <div class="flex flex-row gap-6" [formGroup]="createBookingForm">
+        <div class="flex flex-col gap-8 p-4 bg-white rounded-2xl">
+            <div class="text-3xl">Reservation details</div>
+            <div>
+                <div>Name</div>
+                <input type="text" placeholder="Name" formControlName="name" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-indigo-600 focus:border-blue-500 block w-full p-2.5" />
+                @if (name.invalid && (name.dirty || name.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (name.hasError('required')) {
+                    <div>
+                        Name is required.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div>
+                <div>Email</div>
+                <input type="email" placeholder="Email" formControlName="email" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-indigo-600 focus:border-blue-500 block w-full p-2.5" />
+                @if (email.invalid && (email.dirty || email.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (email.hasError('required')) {
+                    <div>
+                        Email is required.
+                    </div>
+                    }
+                    @if (email.hasError('email')) {
+                    <div>
+                        Email is not in correct format.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div>
+                <div>Workspace type</div>
+                <app-dropdown [options]="workspaceTypeOptions" formControlName="workspaceType" (valueChange)="onSelectedWorkspaceTypeChange(); onSelectedStartDateChange()"></app-dropdown>
+                @if (workspaceType.invalid && (workspaceType.dirty || workspaceType.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (workspaceType.hasError('required')) {
+                    <div>
+                        Workspace type is required.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            @if(createBookingForm.value.workspaceType == workspaceTypeOptions[0].value){
+            <div class="flex flex-col gap-3">
+                <div>How many desks you need?</div>
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad1" name="seats" [value]="1" formControlName="seats">
+                        <label for="rad1"><b>1 desk</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad2" name="seats" [value]="2" formControlName="seats">
+                        <label for="rad2"><b>2 desks</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad3" name="seats" [value]="3" formControlName="seats">
+                        <label for="rad3"><b>3 desks</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad4" name="seats" [value]="4" formControlName="seats">
+                        <label for="rad4"><b>4 desks</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad5" name="seats" [value]="5" formControlName="seats">
+                        <label for="rad5"><b>5 desks</b></label>
+                    </div>
+                </div>
+                @if (seats.invalid && (seats.dirty || seats.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (seats.hasError('required')) {
+                    <div>
+                        Desk count is required.
+                    </div>
+                    }
+                    @if (seats.hasError('min')) {
+                    <div>
+                        Desk count must be more than 0.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            }
+            @if(createBookingForm.value.workspaceType == workspaceTypeOptions[1].value){
+            <div class="flex flex-col gap-3">
+                <div>What room size do you need?</div>
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad1" name="seats" [value]="1" formControlName="seats">
+                        <label for="rad1"> Room for <b>1 person</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad2" name="seats" [value]="2" formControlName="seats">
+                        <label for="rad2"> Room for <b>2 people</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad3" name="seats" [value]="5" formControlName="seats">
+                        <label for="rad3"> Room for <b>5 people</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad4" name="seats" [value]="10" formControlName="seats">
+                        <label for="rad4"> Room for <b>10 people</b></label>
+                    </div>
+                </div>
+                @if (seats.invalid && (seats.dirty || seats.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (seats.hasError('required')) {
+                    <div>
+                        Room size is required.
+                    </div>
+                    }
+                    @if (seats.hasError('min')) {
+                    <div>
+                        Room size must be more than 0.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            }
+            @if(createBookingForm.value.workspaceType == workspaceTypeOptions[2].value){
+            <div class="flex flex-col gap-3">
+                <div>What room size do you need?</div>
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad1" name="seats" [value]="10" formControlName="seats">
+                        <label for="rad1"> Room for <b>10 people</b></label>
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                        <input class="size-5" type="radio" id="rad2" name="seats" [value]="20" formControlName="seats">
+                        <label for="rad2"> Room for <b>20 people</b></label>
+                    </div>
+                </div>
+                @if (seats.invalid && (seats.dirty || seats.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (seats.hasError('required')) {
+                    <div>
+                        Room size is required.
+                    </div>
+                    }
+                    @if (seats.hasError('min')) {
+                    <div>
+                        Room size must be more than 0.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+        <div class="flex flex-col gap-8 p-4 bg-white rounded-2xl">
+            <div class="text-3xl">Choose date and time</div>
+            <div>
+                <div class="text-2xl">Start Date</div>
+                <app-date-picker [minDate]="minStartDate" [maxDate]="maxStartDate" formControlName="startDate" (valueChange)="onSelectedStartDateChange()"></app-date-picker>
+                @if (startDate.invalid && (startDate.dirty || startDate.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (startDate.hasError('required')) {
+                    <div>
+                        Start Date is required.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div>
+                <div class="text-2xl">End Date</div>
+                <app-date-picker [minDate]="minEndDate" [maxDate]="maxEndDate" formControlName="endDate"></app-date-picker>
+                @if (endDate.invalid && (endDate.dirty || endDate.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (endDate.hasError('required')) {
+                    <div>
+                        End Date is required.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div>
+                <div class="text-2xl">Start time</div>
+                <app-dropdown [options]="startTimeOptions" formControlName="startTime" (valueChange)="onSelectedStartTimeChange()"></app-dropdown>
+                @if (startTime.invalid && (startTime.dirty || startTime.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (startTime.hasError('required')) {
+                    <div>
+                        Start time is required.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div>
+                <div class="text-2xl">End time</div>
+                <app-dropdown [options]="endTimeOptions" formControlName="endTime"></app-dropdown>
+                @if (endTime.invalid && (endTime.dirty || endTime.touched)) {
+                <div class="text-red-500 text-sm">
+                    @if (endTime.hasError('required')) {
+                    <div>
+                        End time is required.
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="self-stretch">
+                <button [disabled]="!createBookingForm.valid" class="bg-blue-600 text-white px-6 py-3 w-full rounded-lg disabled:bg-neutral-600" (click)="onSubmit()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+    <app-modal [(opened)]="errorOpened">
+        <div class="flex flex-col gap-4 p-10 bg-white rounded-2xl">
+            <div class="flex flex-row">
+                <div>
+                    <img class="size-20" src="assets\Icon Cancel.svg" />
+                </div>
+                <div class="flex-grow-1"></div>
+                <div (click)="errorOpened=false">
+                    <img width="36" height="36" src="assets\x.svg" />
+                </div>
+            </div>
+            @for(error of errors;track i ;let i = $index){
+            <div class="text-3xl">
+                {{error}}
+            </div>
+            }
+            <div>
+                <button class="text-center bg-blue-600 text-white px-6 rounded-lg py-2" (click)="errorOpened=false">
+                    Ok
+                </button>
+            </div>
+        </div>
+    </app-modal>
+    }
+    @else{
+    <div class="text-3xl">{{error}}</div>
+    }
+</div>

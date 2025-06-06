@@ -1,0 +1,19 @@
+<div>
+    <div class="relative mt-2">
+        <button type="button" class="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label" (click)="toggleOpened(); onTouched();">
+            <span class="col-start-1 row-start-1 flex items-center gap-3 pr-6">
+                <span class="h-6 block truncate">{{selected?.text}}</span>
+            </span>
+            <img class="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4" src="assets\Chevron.svg">
+        </button>
+        <ul [ngClass]="{'hidden': !opened}" class=" absolute z-10 mt-1 max-h-56 w-full min-w-fit  overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden sm:text-sm" tabindex="-1" role="listbox" aria-labelledby="listbox-label">
+            @for   (option of options; track option; let  i = $index){
+            <li class="relative cursor-default py-2 text-gray-900 select-none hover:bg-indigo-600 hover:text-white hover:outline-hidden focus:bg-indigo-600 focus:text-white focus:outline-hidden" role="option" (click)="onSelectedChanged(option)">
+                <div class="flex items-center">
+                    <span [ngClass]="{'font-semibold': option.value == value, 'font-normal':option.value != value}" class="ml-3 block font-normal">{{option.text}}</span>
+                </div>
+            </li>
+            }
+        </ul>
+    </div>
+</div>

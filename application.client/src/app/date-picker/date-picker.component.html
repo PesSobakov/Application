@@ -1,0 +1,5 @@
+<div class="flex flex-row gap-3">
+    <app-dropdown w [options]="dayOptions" [formControl]="dayControl"  (valueChange)="onDayChanged()"></app-dropdown>
+    <app-dropdown [options]="monthOptions" [formControl]="monthControl"  (valueChange)="onMonthChanged()"></app-dropdown>
+    <app-dropdown [options]="yearOptions" [formControl]="yearControl"  (valueChange)="onYearChanged()"></app-dropdown>
+</div>

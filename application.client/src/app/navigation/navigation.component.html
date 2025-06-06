@@ -1,0 +1,30 @@
+<div class="flex flex-row px-20 py-5 gap-16 justify-between items-center bg-white">
+    <div class="w-[168px] h-[48px]">
+        <a class="w-[168px] h-[48px]" routerLink="/coworking-details" routerLinkActive="active">
+            <img class="w-[168px] h-[48px] min-w-[100px] object-cover" src="assets\Logo.png" />
+        </a>
+    </div>
+
+
+    <div class="flex flex-row gap-16 justify-end items-center">
+        <div class="flex flex-col gap-1">
+            <div>
+                You logged as {{(user$|async)?.value}}. Not you?
+            </div>
+            <div class="flex flex-row gap-1">
+                <div>
+                    <input type="text" placeholder="Email" [(ngModel)] ="username" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-indigo-600 focus:border-blue-500 block w-full p-1" />
+                </div>
+                <div>
+                    <button class="bg-blue-600 text-white p-1 text-sm rounded-lg" (click)="login()">Login</button>
+                </div>
+            </div>
+        </div>
+        <span [ngClass]="{'border-b-[1.5px] border-[#5C5AF3]': isSelectedNav('/coworking-details')}" class="h-10 flex flex-col justify-center">
+            <a class="text-base" routerLink="/coworking-details" routerLinkActive="active">Workspaces</a>
+        </span>
+        <span [ngClass]="{'border-b-[1.5px] border-[#5C5AF3]': isSelectedNav('/my-booking')}" class="h-10 flex flex-col justify-center">
+            <a routerLink="/my-booking" routerLinkActive="active">My Bookings</a>
+        </span>
+    </div>
+</div>

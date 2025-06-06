@@ -4,30 +4,30 @@
 # For more information, please see https://aka.ms/containercompat
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-nanoserver-1809 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
 
 # This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:9.0-nanoserver-1809 AS with-node
-WORKDIR /src
-RUN curl https://nodejs.org/dist/v18.18.0/node-v18.18.0-win-x64.zip --output node.zip
-RUN tar -xf node.zip
-USER ContainerAdministrator
-RUN setx /M path "%path%;C:\src\node-v18.18.0-win-x64"
-USER ContainerUser
-RUN npm install -g @angular/cli
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS with-node
+#WORKDIR /src
+#RUN curl https://nodejs.org/dist/v18.18.0/node-v18.18.0-win-x64.zip --output node.zip
+#RUN tar -xf node.zip
+#USER ContainerAdministrator
+#RUN setx /M path "%path%;C:\src\node-v18.18.0-win-x64"
+#USER ContainerUser
+#RUN npm install -g @angular/cli
 
 FROM with-node AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Application.Server/Application.Server.csproj", "Application.Server/"]
-COPY ["application.client/application.client.esproj", "application.client/"]
+COPY ["Application.Server.csproj", "Application.Server/"]
 RUN dotnet restore "./Application.Server/Application.Server.csproj"
-COPY . .
+
 WORKDIR "/src/Application.Server"
+COPY . .
 RUN dotnet build "./Application.Server.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

@@ -1,0 +1,89 @@
+<div class="flex flex-col p-20 gap-10">
+    <div class="text-4xl">My bookings on Green Coworking</div>
+    <div class="flex flex-col gap-6" *ngIf="((bookings$|async)??[]) as bookings">
+        @if(bookings && bookings.length > 0){
+        <ng-container>
+            @for    (booking of bookings;track booking.id; let  i = $index){
+            <div class="flex flex-row gap-8 p-4 bg-white rounded-2xl">
+                <div class="w-3/10">
+                    <img class="aspect-4/3 object-cover rounded-2xl" src="{{getImageSrc(booking.workspace.workspaceType)}}">
+                </div>
+                <div class="flex flex-col py-3 gap-8 flex-grow-1">
+                    <div class="flex flex-row justify-between gap-3">
+                        <div>
+                            <div class="text-3xl">{{getName(booking)}}</div>
+                        </div>
+                        <div class="flex flex-row gap-3 ">
+                            <div class="p-[10px] rounded-lg border-2 border-[#C2BCD8] self-start" routerLink="/edit-booking-form/{{booking.id}}" routerLinkActive="active">
+                                <img class="w-6 aspect-1/1" src="assets\edit.svg" />
+                            </div>
+                            <div (click)="showDelete(booking)" class="p-[10px] rounded-lg border-2 border-[#F56E6E] self-start">
+                                <img class="w-6 aspect-1/1" src="assets\trash.svg" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-row gap-3 items-center">
+                            <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                <img class="size-6" src="assets\calendar.svg" />
+                            </div>
+                            <div class="text-lg">{{getDate(booking)}}</div>
+                        </div>
+                        <div class="flex flex-row gap-3 items-center">
+                            <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                <img class="size-6" src="assets\clock-hour-3.svg" />
+                            </div>
+                            <div class="text-lg">{{getTime(booking)}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </ng-container>
+        }
+        @else{
+        <div class="p-4 bg-white rounded-2xl">
+            <div class=" flex flex-col gap-5 items-center p-10">
+                <div class="text-3xl">🔍</div>
+                <div class="text-3xl">You don’t have any bookings yet</div>
+                <div class="text-neutral-500">Start by choosing a coworking space</div>
+                <div>
+                    <button class="bg-blue-600 text-white px-6 rounded-lg h-12" routerLink="/coworking-details" routerLinkActive="active">Select a workspace</button>
+                </div>
+            </div>
+
+        </div>
+        }
+        <app-modal [(opened)]="deleteOpened">
+            <div class="flex flex-col gap-4 p-10 bg-white rounded-2xl">
+                <div class="flex flex-row">
+                    <div>
+                        <img class="size-20" src="assets\Icon Delete.svg" />
+                    </div>
+                    <div class="flex-grow-1"></div>
+                    <div (click)="deleteOpened=false">
+                        <img width="36" height="36" src="assets\x.svg" />
+                    </div>
+                </div>
+                <div class="text-3xl">
+                    Cancel your booking?
+                </div>
+                <div class="text-neutral-500">
+                    This action cannot be undone
+                </div>
+                <div class="flex flex-row  items-center gap-3">
+                    <div class="flex-grow-1">
+                        <button (click)="deleteBooking(bookingForDeletion)" class="text-center border-blue-600 border-1 text-black px-6 rounded-lg py-2 w-full">
+                            Yes, cancel it
+                        </button>
+                    </div>
+                    <div class="flex-grow-1">
+                        <button (click)="deleteOpened=false" class="text-center bg-blue-600 text-white px-6 rounded-lg py-2 w-full">
+                            No, keep it
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </app-modal>
+    </div>
+</div>

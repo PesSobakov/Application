@@ -8,7 +8,7 @@ using Application.Server.Models.DTOs.GetWorkspaces;
 
 namespace Application.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     [EnableCors("OpenCORSPolicy")]
     public class WorkspaceController : ControllerBase
@@ -22,7 +22,6 @@ namespace Application.Server.Controllers
         }
 
         [HttpGet]
-        [ActionName("workspace")]
         public async Task<IActionResult> GetWorkspaces()
         {
             var response = await _coworkingDatabaseService.GetWorkspaces();

@@ -1,0 +1,16 @@
+<div>
+    @if(photoSrcs && photoSrcs.length > 0){
+    <div class="flex flex-col gap-3">
+        <div class="w-full aspect-4/3">
+            <img class="w-full h-full object-cover rounded-2xl" src="{{photoSrcs[selected]}}" />
+        </div>
+        <div class="flex flex-row w-full gap-2">
+            @for (src of photoSrcs; track src; let  i = $index) {
+            <div class="w-1/4 ">
+                <img class=" aspect-4/3 object-cover rounded-lg" src="{{src}}" (click)="selected = i" [ngClass]="{'opacity-50': selected!=i}" />
+            </div>
+            }
+        </div>
+    </div>
+    }
+</div>
