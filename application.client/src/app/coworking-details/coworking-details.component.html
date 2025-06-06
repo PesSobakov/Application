@@ -1,0 +1,167 @@
+<div class="flex flex-col p-20 gap-10">
+    <div class="text-4xl">Available workspaces</div>
+    <div class="flex flex-col gap-6" *ngIf="workspaces$|async as workspaces">
+        <div class="flex flex-row gap-8 p-4 bg-white rounded-2xl">
+            <div class="w-4/10">
+                <app-photo-gallery [photoSrcs]="['assets\\Open Space 1.jpg','assets\\Open Space 2.png','assets\\Open Space 3.png','assets\\Open Space 4.png']">
+                </app-photo-gallery>
+            </div>
+            <div class="flex flex-col py-3 gap-8">
+                <div class="flex flex-row gap-3">
+                    <div class="flex flex-col gap-3">
+                        <div class="text-3xl">Open space</div>
+                        <div class="text-neutral-500">A vibrant shared area perfect for freelancers or small teams who enjoy a collaborative atmosphere. Choose any available desk and get to work with flexibility and ease.</div>
+                    </div>
+                    <div>
+                        <button class="bg-blue-600 text-white px-6 rounded-lg h-12 w-45" routerLink="/booking-form/0" routerLinkActive="active">Book now</button>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex flex-row gap-x-20 gap-y-3 flex-wrap">
+                        <div class="flex flex-col">
+                            <div class="text-lg">Amenities</div>
+                            <div class="flex flex-row flex-wrap gap-3">
+                                @for( amenity of getAmenities(workspaces,0);track i; let  i = $index){
+                                <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                    <img class="size-6" src="{{getAmenitySrc(amenity)}}" />
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="text-lg">Availability</div>
+                            <div class="flex flex-row gap-3 items-center">
+                                <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                    <img class="size-6" src="assets\armchair.svg" />
+                                </div>
+                                <div class="text-lg">{{getFreeDesks(workspaces)}} desks</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="bookings$|async as bookings" class="flex flex-col gap-3">
+                    @for(booking of getBookings(bookings,0);track booking.id; let  i = $index){
+                    <div class="flex flex-row gap-2 bg-[#EAF7EE] rounded-lg px-4 py-2">
+                        <img class="size-6" src="assets\done.svg" />
+                        <div>
+                            This workspace is already booked by you! {{booking.seats}} {{booking.seats==1?"desk":"desks"}} <b> {{booking.startDate}} to {{booking.endDate}}</b>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row gap-8 p-4 bg-white rounded-2xl">
+            <div class="w-4/10">
+                <app-photo-gallery [photoSrcs]="['assets\\Private Room 1.jpg','assets\\Private Room 2.png','assets\\Private Room 3.png']">
+                </app-photo-gallery>
+            </div>
+            <div class="flex flex-col py-3 gap-8">
+                <div class="flex flex-row gap-3">
+                    <div class="flex flex-col gap-3">
+                        <div class="text-3xl">Private Rooms</div>
+                        <div class="text-neutral-500">Ideal for focused work, video calls, or small team huddles. These fully enclosed rooms offer privacy and come in a variety of sizes to fit your needs.</div>
+                    </div>
+                    <div>
+                        <button class="bg-blue-600 text-white px-6 rounded-lg h-12 w-45" routerLink="/booking-form/1" routerLinkActive="active">Book now</button>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex flex-row gap-x-20 gap-y-3 flex-wrap">
+                        <div class="flex flex-col">
+                            <div class="text-lg">Amenities</div>
+                            <div class="flex flex-row flex-wrap gap-3">
+                                @for( amenity of getAmenities(workspaces,1);track i; let  i = $index){
+                                <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                    <img class="size-6" src="{{getAmenitySrc(amenity)}}" />
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="text-lg">Capacity options</div>
+                            <div class="flex flex-row gap-3 items-center">
+                                <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                    <img class="size-6" src="assets\user.svg" />
+                                </div>
+                                <div class="text-lg">1, 2, 5, 10 people</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="text-lg">Availability</div>
+                    <div class="text-neutral-500"><b class="text-black">{{getFreeRooms(workspaces,1,1)}} rooms</b> for 1 person</div>
+                    <div class="text-neutral-500"><b class="text-black">{{getFreeRooms(workspaces,1,2)}} rooms</b> for up to 2 people</div>
+                    <div class="text-neutral-500"><b class="text-black">{{getFreeRooms(workspaces,1,5)}} rooms</b> for up to 5 people</div>
+                    <div class="text-neutral-500"><b class="text-black">{{getFreeRooms(workspaces,1,10)}} room</b> for up to 10 people</div>
+                </div>
+                <div *ngIf="bookings$|async as bookings" class="flex flex-col gap-3">
+                    @for(booking of getBookings(bookings,1);track booking.id; let  i = $index){
+                    <div class="flex flex-row gap-2 bg-[#EAF7EE] rounded-lg px-4 py-2">
+                        <img class="size-6" src="assets\done.svg" />
+                        <div>
+                            This workspace is already booked by you! Room for {{booking.workspace.capacity}} {{booking.workspace.capacity==1?"person":"people"}} <b> {{booking.startDate}} to  {{booking.endDate}}</b>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row gap-8 p-4 bg-white rounded-2xl">
+            <div class="w-4/10">
+                <app-photo-gallery [photoSrcs]="['assets\\Meeting Room 1.png','assets\\Meeting Room 2.png','assets\\Meeting Room 3.png','assets\\Meeting Room 4.png']">
+                </app-photo-gallery>
+            </div>
+            <div class="flex flex-col py-3 gap-8">
+                <div class="flex flex-row gap-3">
+                    <div class="flex flex-col gap-3">
+                        <div class="text-3xl">Meeting rooms</div>
+                        <div class="text-neutral-500">Designed for productive meetings, workshops, or client presentations. Equipped with screens, whiteboards, and comfortable seating to keep your sessions running smoothly.</div>
+                    </div>
+                    <div>
+                        <button class="bg-blue-600 text-white px-6 rounded-lg h-12 w-45" routerLink="/booking-form/2" routerLinkActive="active">Book now</button>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex flex-row gap-x-20 gap-y-3 flex-wrap">
+                        <div class="flex flex-col">
+                            <div class="text-lg">Amenities</div>
+                            <div class="flex flex-row flex-wrap gap-3">
+                                @for( amenity of getAmenities(workspaces,2);track i; let  i = $index){
+                                <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                    <img class="size-6" src="{{getAmenitySrc(amenity)}}" />
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="text-lg">Capacity options</div>
+                            <div class="flex flex-row gap-3 items-center">
+                                <div class="p-[10px] rounded-xl bg-[#F5F3FB]">
+                                    <img class="size-6" src="assets\user.svg" />
+                                </div>
+                                <div>10 or 20 people</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <div class="text-lg">Availability</div>
+                    <div class="text-neutral-500"><b class="text-black">{{getFreeRooms(workspaces,2,10)}} rooms</b> for up to 10 people</div>
+                    <div class="text-neutral-500"><b class="text-black">{{getFreeRooms(workspaces,2,20)}} room</b> for up to 20 people</div>
+                </div>
+                <div *ngIf="bookings$|async as bookings" class="flex flex-col gap-3">
+                    @for(booking of getBookings(bookings,2);track booking.id; let  i = $index){
+                    <div class="flex flex-row gap-2 bg-[#EAF7EE] rounded-lg px-4 py-2">
+                        <img class="size-6" src="assets\done.svg" />
+                        <div>
+                            This workspace is already booked by you! Room for {{booking.workspace.capacity}} {{booking.workspace.capacity==1?"person":"people"}} <b> {{booking.startDate}} to  {{booking.endDate}}</b>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
