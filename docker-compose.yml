@@ -33,10 +33,12 @@ services:
     volumes:
       - ~/.aspnet/https:/https:ro
 
-#  application_client:
-#    build:
-#     dockerfile: "./application.client/Dockerfile"
-#    environment:
-#      API_URL: application_server
-#    ports:    # Set up ports exposed for other containers to connect to
-#      - 8080:80
+  application_client:
+    depends_on:
+      - application_server
+    build:
+     dockerfile: "./application.client/Dockerfile"
+    environment:
+      API_URL: application_server:8081
+    ports:    # Set up ports exposed for other containers to connect to
+      - 8080:80
