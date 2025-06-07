@@ -11,6 +11,14 @@ after that run in command line
 ```
 docker-compose up -d --build
 ```
+Before using application you need initialise and seed database
+
+visit site https://127.0.0.1:7018/api/Auth/seed 
+
+or use https://127.0.0.1:7018/swagger
+and run request api/Auth/seed
+
+frontend will be available at http://localhost:8080
 # Environment variables
 backend
 ```
