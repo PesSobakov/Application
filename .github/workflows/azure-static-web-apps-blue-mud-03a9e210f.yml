@@ -30,6 +30,7 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "./application.client" # App source code path
           api_location: "" # Api source code path - optional
+          app_build_command: 'sed "s/localhost:7018/${{ vars.API_URL }}/" "src/environments/environment.ts" && npm install --force && npm run build'
           output_location: "dist/application.client" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
