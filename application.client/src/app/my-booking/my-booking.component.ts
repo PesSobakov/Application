@@ -7,13 +7,14 @@ import { WorkspaceType } from '../../models/WorkspaceType';
 @Component({
   selector: 'app-my-booking',
   templateUrl: './my-booking.component.html',
-  styleUrl: './my-booking.component.css'
+  styleUrl: './my-booking.component.css',
+  standalone: false
 })
 export class MyBookingComponent
 {
   constructor(private api: ApiService) { }
   bookings$?: Observable<BookingDto[]> = this.api.GetBookings();
-  workspaceImages = ["assets\\Open Space 1.jpg", "assets\\Private Room 1.jpg", "assets\\Meeting Room 1.png"];
+  workspaceImages = ["assets\\Open Space 1.jpg", "assets\\Private Room 1.jpg", "assets\\Meeting Room 1.jpg"];
   getImageSrc(type: WorkspaceType)
   {
     switch (type) {

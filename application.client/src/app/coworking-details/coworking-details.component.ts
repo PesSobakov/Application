@@ -9,7 +9,8 @@ import { BookingDto } from '../../DTOs/GetBooking/BookingDto';
 @Component({
   selector: 'app-coworking-details',
   templateUrl: './coworking-details.component.html',
-  styleUrl: './coworking-details.component.css'
+  styleUrl: './coworking-details.component.css',
+  standalone: false
 })
 export class CoworkingDetailsComponent
 {

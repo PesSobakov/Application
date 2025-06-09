@@ -9,7 +9,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
-  styleUrl: './booking-form.component.css'
+  styleUrl: './booking-form.component.css',
+  standalone: false
 })
 export class BookingFormComponent
 {

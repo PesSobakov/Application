@@ -5,7 +5,8 @@ import { ControlValueAccessor, NgControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
-  styleUrl: './dropdown.component.css'
+  styleUrl: './dropdown.component.css',
+  standalone: false
 })
 export class DropdownComponent<T> implements OnInit, ControlValueAccessor
 {

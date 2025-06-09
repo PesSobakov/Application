@@ -10,7 +10,8 @@ import { LoginDto } from '../../DTOs/LoginDto';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.css'
+  styleUrl: './navigation.component.css',
+  standalone: false
 })
 export class NavigationComponent
 {

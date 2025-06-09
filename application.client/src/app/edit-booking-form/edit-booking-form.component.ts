@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-edit-booking-form',
   templateUrl: './edit-booking-form.component.html',
-  styleUrl: './edit-booking-form.component.css'
+  styleUrl: './edit-booking-form.component.css',
+  standalone: false
 })
 export class EditBookingFormComponent
 {

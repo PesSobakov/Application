@@ -346,9 +346,11 @@ namespace Application.Server.Services
 
         public async Task<ServiceResponse> Seed()
         {
-            await _coworkingContext.Database.EnsureDeletedAsync();
             await _coworkingContext.Database.EnsureCreatedAsync();
-
+            _coworkingContext.Remove(_coworkingContext.Workspaces);
+            _coworkingContext.Remove(_coworkingContext.Bookings);
+            _coworkingContext.Remove(_coworkingContext.Users);
+         
             List<Workspace> workspaces =
             [
                 new Workspace

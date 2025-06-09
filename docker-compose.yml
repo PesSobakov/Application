@@ -38,7 +38,9 @@ services:
       - application_server
     build:
      dockerfile: "./application.client/Dockerfile"
+     args:
+      API_URL: localhost:7018
     environment:
-      API_URL: application_server:8081
+      API_URL: localhost:7018
     ports:    # Set up ports exposed for other containers to connect to
       - 8080:80
