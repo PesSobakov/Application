@@ -5,9 +5,10 @@ namespace Application.Server.Models.CoworkingDatabase
     public class CoworkingContext : DbContext
     {
         public CoworkingContext(DbContextOptions<CoworkingContext> options) : base(options) { }
+        public DbSet<Coworking> Coworkings { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

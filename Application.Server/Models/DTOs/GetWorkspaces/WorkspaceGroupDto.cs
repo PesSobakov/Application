@@ -2,12 +2,11 @@
 
 namespace Application.Server.Models.DTOs.GetWorkspaces
 {
-    public class WorkspaceDto
+    public class WorkspaceGroupDto
     {
-        public int Id { get; set; }
-        public int Capacity { get; set; }
-        public List<Amenity> Amenities { get; set; } = null!;
         public WorkspaceType WorkspaceType { get; set; }
+        public List<Amenity> Amenities { get; set; } = null!;
+        public List<FreeRoomsDto> FreeRooms { get; set; } = null!;
         public List<BookingDto> Bookings { get; set; } = null!;
     }
 }

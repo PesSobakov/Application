@@ -1,10 +1,8 @@
-﻿namespace Application.Server.Models.DTOs.GetBooking
+﻿namespace Application.Server.Models.DTOs.BookingQuestion
 {
     public class BookingDto
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string Email { get; set; } = null!;
         public WorkspaceDto Workspace { get; set; } = null!;
         public int Seats { get; set; }
         public DateOnly StartDate { get; set; }

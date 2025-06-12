@@ -6,8 +6,6 @@
         Unauthorized,
         BadRequest,
         Forbidden,
-        UserExists,
-        UserNotExists,
-        WrongPassword,
+        InternalServerError
     }
 }
