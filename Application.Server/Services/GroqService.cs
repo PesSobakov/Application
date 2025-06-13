@@ -21,10 +21,10 @@ namespace Application.Server.Services
             _timeProvider = timeProvider;
 
             string apiKey = _configuration["GROQ_API_KEY"]!;
-            string apiModel = "llama3-70b-8192";
+            ///string apiModel = "llama3-70b-8192";
             //string apiModel = "llama-3.3-70b-versatile";
             //string apiModel = "meta-llama/llama-4-maverick-17b-128e-instruct";
-            //string apiModel = "meta-llama/llama-4-scout-17b-16e-instruct";
+            string apiModel = "meta-llama/llama-4-scout-17b-16e-instruct";
 
             _groqClient = new GroqClient(apiKey, apiModel);
              _groqClient.SetTemperature(0);

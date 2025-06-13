@@ -21,7 +21,6 @@ export class BookingFormComponent
     <Option<WorkspaceType>>{ value: WorkspaceType.PrivateRoom, text: "Private room" },
     <Option<WorkspaceType>>{ value: WorkspaceType.MeetingRoom, text: "Meeting room" }
   ];
-  //new Date(0,0,0,9,0,0).toTimeString()
   timeSlotBoundaries = [
     <Option<Date>>{ value: new Date(0, 0, 0, 8, 0, 0), text: "8:00 AM" },
     <Option<Date>>{ value: new Date(0, 0, 0, 8, 30, 0), text: "8:30 AM" },
@@ -48,7 +47,8 @@ export class BookingFormComponent
   startTimeOptions = this.timeSlotBoundaries.slice(0, -1);
   endTimeOptions = this.timeSlotBoundaries.slice(1);
 
-  @Input() type: string | undefined
+  @Input() type?: string
+  @Input() id!: string
 
   onSelectedWorkspaceTypeChange()
   {
@@ -172,6 +172,7 @@ export class BookingFormComponent
     this.errors = [];
     if (this.createBookingForm.valid) {
       let dto = <CreateBookingDto>{
+        coworkingId: +this.id,
         name: this.createBookingForm.value.name!,
         email: this.createBookingForm.value.email,
         workspaceType: this.createBookingForm.value.workspaceType,
@@ -205,6 +206,9 @@ export class BookingFormComponent
 
   ngOnInit()
   {
+    //if (this.id != undefined && +this.id != undefined) {
+    //  this.workspaceGroups$ = this.api.GetWorkspaces(+this.id);
+    //}
     if (this.type != undefined && this.type in WorkspaceType) {
       switch (this.type) {
         case ("0"):

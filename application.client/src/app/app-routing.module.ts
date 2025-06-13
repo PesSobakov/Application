@@ -1,21 +1,26 @@
-import {  NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { CoworkingDetailsComponent } from './coworking-details/coworking-details.component';
 import { BookingFormComponent } from './booking-form/booking-form.component';
 import { MyBookingComponent } from './my-booking/my-booking.component';
 import { EditBookingFormComponent } from './edit-booking-form/edit-booking-form.component';
+import { CoworkingListComponent } from './coworking-list/coworking-list.component';
 
 const routes: Routes = [
   {
-    path: 'coworking-details',
+    path: 'coworking-list',
+    component: CoworkingListComponent
+  },
+  {
+    path: 'coworking-details/:id',
     component: CoworkingDetailsComponent,
   },
   {
-    path: 'booking-form/:type',
+    path: 'booking-form/:id/:type',
     component: BookingFormComponent
   },
   {
-    path: 'booking-form',
+    path: 'booking-form/:id',
     component: BookingFormComponent
   },
   {
@@ -27,12 +32,12 @@ const routes: Routes = [
     component: EditBookingFormComponent
   },
 
-  { path: '', redirectTo: '/coworking-details', pathMatch: 'full' },
-  { path: "**", component: CoworkingDetailsComponent, pathMatch: 'full' }
+  { path: '', redirectTo: '/coworking-list', pathMatch: 'full' },
+  { path: "**", component: CoworkingListComponent, pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, <ExtraOptions>{ bindToComponentInputs: true, onSameUrlNavigation: 'reload',scrollPositionRestoration:'top' })],
+  imports: [RouterModule.forRoot(routes, <ExtraOptions>{ bindToComponentInputs: true, onSameUrlNavigation: 'reload', scrollPositionRestoration: 'top' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,0 +1,31 @@
+<div class="flex flex-col gap-10">
+    <div class="text-4xl">AI Assistant</div>
+    @if (response!=undefined){
+    <div class="flex flex-col  px-4 py-3 bg-white border-[#C2BCD8] border-1 rounded-lg gap-3">
+        <div class="text-3xl">
+            {{responseQuestion}}
+        </div>
+        <div class="flex flex-col gap-1">
+            @for(string of response.split("\n");track i;let i = $index){
+            <div>
+                {{string}}
+            </div>
+            }
+        </div>
+    </div>
+    }
+    <div class="flex flex-col gap-6">
+        <div class="text-2xl">{{response==undefined?"Example questions":"Ask something else"}}</div>
+        <div class="flex flex-row gap-4">
+            @for(sample of exampleQuestions; track sample){
+            <button class=" text-[#5C5AF3] border-[#5C5AF3] border-1 px-4 py-3 rounded-sm" (click)="submit(sample)">{{sample}}</button>
+            }
+        </div>
+    </div>
+    <div class="flex flex-row justify-between px-4 py-3 bg-white border-[#C2BCD8] border-1 rounded-lg">
+        <input class="grow  text-gray-900 focus:outline-transparent focus:border-transparent" type="text" placeholder="Ask anything..." [(ngModel)]="question" (keydown.enter)="submit(question)">
+        <button class=" px-2 py-2 bg-[#5C5AF3] rounded" (click)="submit(question)">
+            <img class="w-4 h-4" src="assets/Vector.svg">
+        </button>
+    </div>
+</div>

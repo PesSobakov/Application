@@ -2,12 +2,13 @@ import { WorkspaceType } from "../models/WorkspaceType"
 
 export interface CreateBookingDto
 {
-  name: string
+  coworkingId: number,
+  name: string,
   email: string
-  workspaceType: WorkspaceType
-  seats: number
-  startDate: string
-  endDate: string
-  startTime: string
+  workspaceType: WorkspaceType,
+  seats: number,
+  startDate: string,
+  endDate: string,
+  startTime: string,
   endTime: string
 }

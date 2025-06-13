@@ -169,7 +169,7 @@ export class EditBookingFormComponent
 
   error: string | undefined;
   errors: string[] = [];
-  sentDto: CreateBookingDto | undefined;
+  sentDto: EditBookingDto | undefined;
   successOpened = false;
   errorOpened = false;
 

@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Amenity } from '../../models/Amenity';
 import { ApiService } from '../api.service';
-import { WorkspaceDto } from '../../DTOs/GetWorkspaces/WorkspaceDto';
 import { Observable } from 'rxjs';
 import { WorkspaceType } from '../../models/WorkspaceType';
-import { BookingDto } from '../../DTOs/GetBooking/BookingDto';
+import { WorkspaceGroupDto } from '../../DTOs/GetWorkspaces/WorkspaceGroupDto';
 
 @Component({
   selector: 'app-coworking-details',
@@ -12,11 +11,10 @@ import { BookingDto } from '../../DTOs/GetBooking/BookingDto';
   styleUrl: './coworking-details.component.css',
   standalone: false
 })
-export class CoworkingDetailsComponent
+export class CoworkingDetailsComponent implements OnInit
 {
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService)  { }
 
-  testAmenities = [Amenity.Coffee, Amenity.GameRoom, Amenity.WiFi, Amenity.Conditioner, Amenity.Microphone, Amenity.Headphones]
   getAmenitySrc(amenity: Amenity): string
   {
     switch (amenity) {
@@ -37,56 +35,32 @@ export class CoworkingDetailsComponent
     }
   }
 
-  workspaces$?: Observable<WorkspaceDto[]> = this.api.GetWorkspaces();
-  bookings$?: Observable<BookingDto[]> = this.api.GetBookings();
+  @Input() id? :string
 
-  getAmenities(workspaces: WorkspaceDto[], workspaceType: WorkspaceType): Amenity[]
+  workspaceGroups$?: Observable<WorkspaceGroupDto[]>;
+
+  getImageSrcs(type: WorkspaceType): string[]
   {
-    return workspaces.find(x => x.workspaceType == workspaceType)?.amenities ?? [];
+    const images = [['assets\\Open Space 1.jpg', 'assets\\Open Space 2.jpg', 'assets\\Open Space 3.jpg', 'assets\\Open Space 4.jpg'], ['assets\\Private Room 1.jpg', 'assets\\Private Room 2.jpg', 'assets\\Private Room 3.jpg'], ['assets\\Meeting Room 1.jpg', 'assets\\Meeting Room 2.jpg', 'assets\\Meeting Room 3.jpg', 'assets\\Meeting Room 4.jpg']];
+    return images[type];
   }
 
-  getFreeDesks(workspaces: WorkspaceDto[]): number
+  getName(type: WorkspaceType): string
   {
-    let now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 0, 0);
-    let totalDesks = workspaces.find(x => x.workspaceType == WorkspaceType.OpenSpace)?.capacity ?? 0;
-    let reserved = 0;
-    workspaces.find(x => x.workspaceType == WorkspaceType.OpenSpace)?.bookings.forEach((y) =>
-    {
-      let startDate = new Date(new Date(y.startDate).getFullYear(), new Date(y.startDate).getMonth(), new Date(y.startDate).getDate(), 12, 0, 0);
-      let endDate = new Date(new Date(y.endDate).getFullYear(), new Date(y.endDate).getMonth(), new Date(y.endDate).getDate(), 12, 0, 0);
-      if (startDate <= now && endDate >= now) {
-        reserved += y.seats;
-      }
-    });
-    return totalDesks - reserved;
+    const names = ["Open space", "Private Rooms","Meeting rooms"];
+    return names[type];
   }
 
-  getFreeRooms(workspaces: WorkspaceDto[], workspaceType: WorkspaceType, capacity: number): number
+  getDescription(type: WorkspaceType): string
   {
-    let now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 0, 0);
-    return workspaces.filter((x) =>
-    {
-      return x.workspaceType == workspaceType &&
-        x.capacity == capacity &&
-        x.bookings.find(y =>
-        {
-          let startDate = new Date(new Date(y.startDate).getFullYear(), new Date(y.startDate).getMonth(), new Date(y.startDate).getDate(), 12, 0, 0);
-          let endDate = new Date(new Date(y.endDate).getFullYear(), new Date(y.endDate).getMonth(), new Date(y.endDate).getDate(), 12, 0, 0);
-          return (startDate <= now && endDate >= now)
-        }) == undefined;
-    }).length
+    const descriptions = ["A vibrant shared area perfect for freelancers or small teams who enjoy a collaborative atmosphere. Choose any available desk and get to work with flexibility and ease.", "Ideal for focused work, video calls, or small team huddles. These fully enclosed rooms offer privacy and come in a variety of sizes to fit your needs.", "Designed for productive meetings, workshops, or client presentations. Equipped with screens, whiteboards, and comfortable seating to keep your sessions running smoothly."];
+    return descriptions[type];
   }
 
-  getBookings(bookings: BookingDto[], workspaceType: WorkspaceType): BookingDto[]
+  ngOnInit()
   {
-    let now = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 12, 0, 0);
-    return bookings.filter((x) =>
-    {
-      let endDate = new Date(new Date(x.endDate).getFullYear(), new Date(x.endDate).getMonth(), new Date(x.endDate).getDate(), 12, 0, 0);
-      return x.workspace.workspaceType == workspaceType &&
-        endDate >= now;
-    });
+    if (this.id != undefined && +this.id != undefined) {
+      this.workspaceGroups$ = this.api.GetWorkspaces(+this.id);
+    }
   }
-
-
 }

@@ -10,6 +10,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Application.Server.Models.ErrorResponses;
 using Application.Server.Models.DTOs.GetBooking;
+using Application.Server.Models.DTOs.GetBookings;
 
 namespace Application.Server.Controllers
 {
@@ -140,7 +141,7 @@ namespace Application.Server.Controllers
             {
                 case ResponseStatus.Ok:
                     Booking booking = response.Data!;
-                    BookingDto bookingDto = _mapper.Map<BookingDto>(booking);
+                    Models.DTOs.GetBooking.BookingDto bookingDto = _mapper.Map<Models.DTOs.GetBooking.BookingDto>(booking);
                     return Ok(bookingDto);
                 case ResponseStatus.Unauthorized:
                     return Unauthorized();

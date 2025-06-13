@@ -1,12 +1,12 @@
 import { WorkspaceType } from "../../models/WorkspaceType"
 import { Amenity } from "../../models/Amenity"
 import { BookingDto } from "./BookingDto"
+import { FreeRoomsDto } from "./FreeRoomsDto"
 
-export interface WorkspaceDto
+export interface WorkspaceGroupDto
 {
-  id: number,
-  capacity: number,
-  amenities: Amenity[]
   workspaceType: WorkspaceType
+  amenities: Amenity[]
+  freeRooms: FreeRoomsDto[],
   bookings: BookingDto[]
 }

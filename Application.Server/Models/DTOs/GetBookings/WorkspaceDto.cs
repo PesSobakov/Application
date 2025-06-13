@@ -1,6 +1,6 @@
 ﻿using Application.Server.Models.CoworkingDatabase;
 
-namespace Application.Server.Models.DTOs.GetBooking
+namespace Application.Server.Models.DTOs.GetBookings
 {
     public class WorkspaceDto
     {

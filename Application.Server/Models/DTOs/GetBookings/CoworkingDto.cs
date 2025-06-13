@@ -1,4 +1,4 @@
-﻿namespace Application.Server.Models.DTOs.GetBooking
+﻿namespace Application.Server.Models.DTOs.GetBookings
 {
     public class CoworkingDto
     {
@@ -6,5 +6,6 @@
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string Address { get; set; } = null!;
+        public List<BookingDto> Bookings { get; set; } = null!;
     }
 }

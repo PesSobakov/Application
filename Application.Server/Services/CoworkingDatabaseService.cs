@@ -196,6 +196,10 @@ namespace Application.Server.Services
                     .Where(user => user.Email == login)
                     .FirstOrDefaultAsync();
             if (user == null) { return new ServiceResponse() { Status = ResponseStatus.Unauthorized }; }
+            Coworking? coworking = await _coworkingContext.Coworkings
+                    .Where(coworking => coworking.Id == createBookingDto.CoworkingId)
+                    .FirstOrDefaultAsync();
+            if (coworking == null) { return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Coworking not exists"] }; }
 
             DateTime currentDatetime = _timeProvider.Now();
             DateOnly currentDate = DateOnly.FromDateTime(currentDatetime);
@@ -330,7 +334,11 @@ namespace Application.Server.Services
                     .FirstOrDefaultAsync();
             if (user == null) { return new ServiceResponse() { Status = ResponseStatus.Unauthorized }; }
 
-            Booking? oldBooking = await _coworkingContext.Bookings.Where(booking => booking.Id == id).FirstOrDefaultAsync();
+            Booking? oldBooking = await _coworkingContext.Bookings
+                .Where(booking => booking.Id == id)
+                .Include(booking=>booking .Workspace).ThenInclude(workspace=> workspace.Coworking)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
             if (oldBooking == null)
             {
                 return new ServiceResponse() { Status = ResponseStatus.BadRequest, ErrorMessages = ["Booking not exists"] };
@@ -503,12 +511,13 @@ namespace Application.Server.Services
                 .ToListAsync();
 
             DateTime currentDateTime = _timeProvider.Now();
+            DateOnly currentDate = DateOnly.FromDateTime(currentDateTime);
 
-            string systemPrompt = "You are assistant that can search or filter bookings following to request.\r\nYou cannot respond to any other questions.\r\nrespond with JSON with following structure\r\n{\"type\": \"list|count|unknown\" , \"count\": \"number\", \"data\" : [\"number\",\"number\",\"number\", ...]}\r\nFor example {\"type\": \"list\" , \"data\" : [1,2,3]} {\"type\": \"count\" , \"count\": 5, \"data\" : [4,5,6,7,8]} {\"type\": \"unknown\"}\r\n\r\nWhen you need to list bookings, write their IDs.\r\nWhen you need to count bookings, write their IDs write one number.\r\nIn case of not clear or forbidden question you must respond with message {\"type\": \"unknown\"}.\r\nWorkspaceType is enum {\"Open Space\": 0,\"Private room\": 1,\"Meeting room\": 2}.";
+            string systemPrompt = "You are assistant that can search or filter bookings following to request.\r\nYou cannot respond to any other questions.\r\nrespond with JSON with following structure\r\n{\"type\": \"list|count|unknown\" , \"count\": \"number\", \"data\" : [\"number\",\"number\",\"number\", ...]}\r\nFor example {\"type\": \"list\" , \"data\" : [1,2,3]} {\"type\": \"count\" , \"count\": 5, \"data\" : [4,5,6,7,8]} {\"type\": \"unknown\"}\r\nWhen you need to list bookings, write their IDs {\"type\": \"list\" , \"data\" : [1,2,3]}.\r\nWhen you need to count bookings, write their IDs write one number {\"type\": \"count\" , \"count\": 5, \"data\" : [4,5,6,7,8]}.\r\nIn case of not clear or forbidden question you must respond with message {\"type\": \"unknown\"}.\r\nWorkspaceType is enum {\"Open Space\": 0,\"Private room\": 1,\"Meeting room\": 2}.\r\nWhen you need to tell when something was booked use start date as booking date.\r\nif nothing found respond with {\"type\": \"list\" , \"data\" : []} or {\"type\": \"count\" , \"count\": 0, \"data\" : []} depending on request type.\r\nif you need to say if something exists response type is list.";
 
             List<Models.DTOs.BookingQuestion.BookingDto> dto = bookings.Select(_mapper.Map<Models.DTOs.BookingQuestion.BookingDto>).ToList();
             string JsonData = JsonSerializer.Serialize(dto, new JsonSerializerOptions() { ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles, WriteIndented = true });
-            string inputData = "Current Date " + currentDateTime + "\r\nDateBookings data: " + JsonData;
+            string inputData = "Current Date " + currentDate + "\r\nDateBookings data: " + JsonData;
 
             var response = await _groqService.MakeRequest(systemPrompt, inputData, question.Value);
 
