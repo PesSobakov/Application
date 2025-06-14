@@ -6,6 +6,9 @@ import { filter, map, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { LoginDto } from '../../DTOs/LoginDto';
+import { Store } from '@ngrx/store';
+import { StringDto } from '../../DTOs/StringDto';
+import { getUser, login } from '../user-store/user.actions';
 
 @Component({
   selector: 'app-navigation',
@@ -15,12 +18,13 @@ import { LoginDto } from '../../DTOs/LoginDto';
 })
 export class NavigationComponent
 {
+  user$: Observable<StringDto | undefined>;
   constructor(
-    private api: ApiService,
-    private route: ActivatedRoute,
+    private store: Store<{ user: StringDto | undefined }>,
     private router: Router
   )
   {
+    this.user$ = store.select('user');
     router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
       .subscribe({
         next: (e: NavigationEnd) =>
@@ -64,31 +68,25 @@ export class NavigationComponent
     return this.url.includes(nav);
   }
 
-  user$ = this.api.getUser();
 
   username = "";
   login()
   {
-    this.api.login(<LoginDto>{ email: this.username }).subscribe(() =>
-    {
-      this.updateUser();
-      const currentUrl = this.router.url;
-      this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() =>
-      {
-        this.router.navigate([currentUrl]);
-      });
-    });
-
+    this.store.dispatch(login({ dto: <LoginDto>{ email: this.username } }));
   }
 
   updateUser()
   {
-    this.user$ = this.api.getUser();
+    this.store.dispatch(getUser());
   }
 
   ngOnInit()
   {
-    this.updateUser();
+    this.user$.subscribe((user) =>
+    {
+      if (user == undefined) {
+        this.updateUser();
+      }
+    });
   }
-
 }

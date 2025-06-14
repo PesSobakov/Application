@@ -16,7 +16,7 @@ export class AiAssistantComponent
   responseQuestion: string | undefined;
   question: string = "";
 
-  exampleQuestions: string[] = ["How many bookings do I have?", "What was booked last week?", "Do I have anything on May 18?"];
+  exampleQuestions: string[] = ["How many bookings do I have?", "Which bookings was active last week?", "Do I have anything on May 18?"];
 
   submit(question: string)
   {

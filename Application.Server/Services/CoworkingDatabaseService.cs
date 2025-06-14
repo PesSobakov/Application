@@ -565,7 +565,14 @@ namespace Application.Server.Services
                     }
                     else if (aiResponse.Data.Count == aiResponse.Count)
                     {
-                        formattedResponse = aiResponse.Count.Value.ToString();
+                        if (aiResponse.Count == 0)
+                        {
+                            formattedResponse = "You have no bookings meeting the criteria";
+                        }
+                        else
+                        {
+                            formattedResponse = aiResponse.Count.Value.ToString();
+                        }
                     }
                     else
                     {

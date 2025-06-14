@@ -22,10 +22,17 @@
             }
         </div>
     </div>
-    <div class="flex flex-row justify-between px-4 py-3 bg-white border-[#C2BCD8] border-1 rounded-lg">
-        <input class="grow  text-gray-900 focus:outline-transparent focus:border-transparent" type="text" placeholder="Ask anything..." [(ngModel)]="question" (keydown.enter)="submit(question)">
-        <button class=" px-2 py-2 bg-[#5C5AF3] rounded" (click)="submit(question)">
-            <img class="w-4 h-4" src="assets/Vector.svg">
-        </button>
+    <div>
+        <div class="flex flex-row justify-between px-4 py-3 bg-white border-[#C2BCD8] border-1 rounded-lg">
+            <input class="grow  text-gray-900 focus:outline-transparent focus:border-transparent" type="text" placeholder="Ask anything..." [(ngModel)]="question" (keydown.enter)="submit(question)">
+            <button class=" px-2 py-2 bg-[#5C5AF3] rounded" (click)="submit(question)">
+                <img class="w-4 h-4" src="assets/Vector.svg">
+            </button>
+        </div>
+        <div class="flex flex-row p-2 justify-center">
+            <div class=" text-neutral-500 text-xs">
+                AI responses may include mistakes.
+            </div>
+        </div>
     </div>
 </div>

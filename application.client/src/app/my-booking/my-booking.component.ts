@@ -3,7 +3,7 @@ import { BookingDto } from '../../DTOs/GetBooking/BookingDto';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { WorkspaceType } from '../../models/WorkspaceType';
-import { CoworkingDto } from '../../DTOs/GetBooking/CoworkingDto';
+import { CoworkingDto } from '../../DTOs/GetBookings/CoworkingDto';
 
 @Component({
   selector: 'app-my-booking',

@@ -16,6 +16,10 @@ import { DropdownComponent } from './dropdown/dropdown.component';
 import { ModalComponent } from './modal/modal.component';
 import { CoworkingListComponent } from './coworking-list/coworking-list.component';
 import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { userReducer } from './user-store/user.reducer';
+import { UserEffects } from './user-store/user.effects';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,9 @@ import { AiAssistantComponent } from './ai-assistant/ai-assistant.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forRoot({ user: userReducer }),
+    EffectsModule.forRoot([UserEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]
