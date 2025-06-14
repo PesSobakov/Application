@@ -6,10 +6,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 
 import { StringDto } from '../DTOs/StringDto';
-import { WorkspaceDto } from '../DTOs/GetWorkspaces/WorkspaceDto';
 import { LoginDto } from '../DTOs/LoginDto';
 import { CreateBookingDto } from '../DTOs/CreateBookingDto';
 import { BookingDto } from '../DTOs/GetBooking/BookingDto';
+import { CoworkingDto } from '../DTOs/GetCoworkings/CoworkingDto';
+import { CoworkingDto as CoworkingDto2 } from '../DTOs/GetBookings/CoworkingDto';
+import { WorkspaceGroupDto } from '../DTOs/GetWorkspaces/WorkspaceGroupDto';
+import { EditBookingDto } from '../DTOs/EditBookingDto';
 
 @Injectable({
   providedIn: 'root'
@@ -35,11 +38,18 @@ export class ApiService
       .get<StringDto>(url, { withCredentials: true });
   }
 
-  GetWorkspaces(): Observable<WorkspaceDto[]> 
+  GetCoworkings(): Observable<CoworkingDto[]> 
   {
-    let url = `${this.endpoint}api/workspace`;
+    let url = `${this.endpoint}api/coworking`;
     return this.http
-      .get<WorkspaceDto[]>(url, { withCredentials: true });
+      .get<CoworkingDto[]>(url, { withCredentials: true });
+  }
+
+  GetWorkspaces(id:number): Observable<WorkspaceGroupDto[]> 
+  {
+    let url = `${this.endpoint}api/workspace/${id}`;
+    return this.http
+      .get<WorkspaceGroupDto[]>(url, { withCredentials: true });
   }
 
   CreateBooking(dto: CreateBookingDto)
@@ -54,7 +64,7 @@ export class ApiService
     return this.http
       .delete(url, { withCredentials: true });
   }
-  EditBooking(id: number, dto: CreateBookingDto)
+  EditBooking(id: number, dto: EditBookingDto)
   {
     let url = `${this.endpoint}api/booking/${id}`;
     return this.http
@@ -66,10 +76,17 @@ export class ApiService
     return this.http
       .get<BookingDto>(url, { withCredentials: true });
   }
-  GetBookings(): Observable<BookingDto[]> 
+  GetBookings(): Observable<CoworkingDto2[]> 
   {
     let url = `${this.endpoint}api/booking`;
     return this.http
-      .get<BookingDto[]>(url, { withCredentials: true });
+      .get<CoworkingDto2[]>(url, { withCredentials: true });
+  }
+
+  BookingsQuestion(dto: StringDto): Observable<StringDto> 
+  {
+    let url = `${this.endpoint}api/booking/question`;
+    return this.http
+      .post<StringDto>(url, dto, { withCredentials: true });
   }
 }

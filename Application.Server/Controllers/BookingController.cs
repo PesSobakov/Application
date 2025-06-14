@@ -10,6 +10,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Application.Server.Models.ErrorResponses;
 using Application.Server.Models.DTOs.GetBooking;
+using Application.Server.Models.DTOs.GetBookings;
 
 namespace Application.Server.Controllers
 {
@@ -140,7 +141,7 @@ namespace Application.Server.Controllers
             {
                 case ResponseStatus.Ok:
                     Booking booking = response.Data!;
-                    BookingDto bookingDto = _mapper.Map<BookingDto>(booking);
+                    Models.DTOs.GetBooking.BookingDto bookingDto = _mapper.Map<Models.DTOs.GetBooking.BookingDto>(booking);
                     return Ok(bookingDto);
                 case ResponseStatus.Unauthorized:
                     return Unauthorized();
@@ -164,8 +165,30 @@ namespace Application.Server.Controllers
             {
                 case ResponseStatus.Ok:
                     List<Booking> bookings = response.Data!;
-                    List<BookingDto> bookingDtos = bookings.Select(_mapper.Map<BookingDto>).ToList();
-                    return Ok(bookingDtos);
+                    List<Coworking> coworkings = bookings.Select(booking=>booking.Workspace).Select(workspace => workspace.Coworking).Distinct().ToList();
+                    List<CoworkingDto> coworkingDtos = coworkings.Select(_mapper.Map<CoworkingDto>).ToList();
+                    return Ok(coworkingDtos);
+                case ResponseStatus.Unauthorized:
+                    return Unauthorized();
+                default:
+                    return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [Route("[action]")]
+        [ActionName("question")]
+        [HttpPost]
+        public async Task<IActionResult> BookingsQuestion([FromBody] StringDto question)
+        {
+            string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();
+            if (login == null) { return Unauthorized(); }
+
+            var response = await _coworkingDatabaseService.BookingsQuestion(login,question);
+            switch (response.Status)
+            {
+                case ResponseStatus.Ok:
+                    StringDto responseText = response.Data!;
+                    return Ok(responseText);
                 case ResponseStatus.Unauthorized:
                     return Unauthorized();
                 default:

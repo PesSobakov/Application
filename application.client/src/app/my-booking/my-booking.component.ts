@@ -3,17 +3,19 @@ import { BookingDto } from '../../DTOs/GetBooking/BookingDto';
 import { Observable } from 'rxjs';
 import { ApiService } from '../api.service';
 import { WorkspaceType } from '../../models/WorkspaceType';
+import { CoworkingDto } from '../../DTOs/GetBookings/CoworkingDto';
 
 @Component({
   selector: 'app-my-booking',
   templateUrl: './my-booking.component.html',
-  styleUrl: './my-booking.component.css'
+  styleUrl: './my-booking.component.css',
+  standalone: false
 })
 export class MyBookingComponent
 {
   constructor(private api: ApiService) { }
-  bookings$?: Observable<BookingDto[]> = this.api.GetBookings();
-  workspaceImages = ["assets\\Open Space 1.jpg", "assets\\Private Room 1.jpg", "assets\\Meeting Room 1.png"];
+  coworkings$?: Observable<CoworkingDto[]> = this.api.GetBookings();
+  workspaceImages = ["assets\\Open Space 1.jpg", "assets\\Private Room 1.jpg", "assets\\Meeting Room 1.jpg"];
   getImageSrc(type: WorkspaceType)
   {
     switch (type) {
@@ -107,7 +109,7 @@ export class MyBookingComponent
       this.api.DeleteBooking(booking.id).subscribe(() =>
       {
         this.deleteOpened = false;
-        this.bookings$ = this.api.GetBookings();
+        this.coworkings$ = this.api.GetBookings();
       });
     }
   }

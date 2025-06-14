@@ -1,11 +1,11 @@
 <div class="flex flex-col p-20 gap-10">
     <div class="flex flex-row gap-1">
         <img class="size-6" src="assets\chevron-left.svg" />
-        <div class="text-blue-500" routerLink="/coworking-details" routerLinkActive="active">Go back</div>
+        <div class="text-blue-500" routerLink="/coworking-details/{{id}}" routerLinkActive="active">Go back</div>
     </div>
     <div class="text-4xl">Book your workspace</div>
     <div class="flex flex-row gap-6" [formGroup]="createBookingForm">
-        <div class="flex flex-col gap-8 p-4 bg-white rounded-2xl">
+        <div class="flex flex-col gap-8 p-4 bg-white rounded-2xl grow">
             <div class="text-3xl">Reservation details</div>
             <div>
                 <div>Name</div>
@@ -159,7 +159,7 @@
             </div>
             }
         </div>
-        <div class="flex flex-col gap-8 p-4 bg-white rounded-2xl">
+        <div class="flex flex-col gap-8 p-4 bg-white rounded-2xl grow">
             <div class="text-3xl">Choose date and time</div>
             <div>
                 <div class="text-2xl">Start Date</div>

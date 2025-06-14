@@ -1,4 +1,6 @@
 FROM node:lts-slim AS build
+ARG API_URL
+ENV API_URL="${API_URL}"
 WORKDIR /src
 RUN npm install -g @angular/cli
 
@@ -7,9 +9,9 @@ RUN npm install -g @angular/cli
 
 COPY . ./
 WORKDIR "/src/application.client"
-CMD ["/bin/sh","-c", "envsubst < src/environments/environment.ts > src/application.client/environments/environment.tmp.ts && mv src/application.client/environments/environment.tmp.ts src/application.client/environments/environment.ts"]
-run npm install --force
-RUN ng build --configuration=production
+RUN sed "s/\$API_URL/${API_URL}/" ./src/environments/environment.ts > ./src/environments/environment.tmp.ts && mv ./src/environments/environment.tmp.ts ./src/environments/environment.ts
+RUN npm install
+RUN npm run build
 
 FROM nginx:stable AS final
 EXPOSE 80

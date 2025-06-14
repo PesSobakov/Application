@@ -5,7 +5,8 @@ import { ControlValueAccessor, FormControl, NgControl, Validators } from '@angul
 @Component({
   selector: 'app-date-picker',
   templateUrl: './date-picker.component.html',
-  styleUrl: './date-picker.component.css'
+  styleUrl: './date-picker.component.css',
+  standalone: false
 })
 export class DatePickerComponent implements OnInit, ControlValueAccessor
 {

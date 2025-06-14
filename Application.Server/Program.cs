@@ -51,7 +51,7 @@ namespace Application.Server
             builder.Services.AddDbContext<CoworkingContext>(
                 options =>
                 {
-                    options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE_CONNECTION_STRING"), options2 =>
+                    options.UseNpgsql(builder.Configuration["DATABASE_CONNECTION_STRING"], options2 =>
                     {
                         options2.CommandTimeout(300);
                     });
@@ -61,6 +61,7 @@ namespace Application.Server
             builder.Services.AddValidatorsFromAssemblyContaining<StringDtoValidator>();
             builder.Services.AddTransient<ITimeProvider, Services.TimeProvider>();
             builder.Services.AddTransient<ICoworkingDatabaseService, CoworkingDatabaseService>();
+            builder.Services.AddTransient<IGroqService, GroqService>();
             
             var app = builder.Build();
 

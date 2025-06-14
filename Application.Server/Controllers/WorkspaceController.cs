@@ -5,6 +5,7 @@ using AutoMapper;
 using System.Net;
 using Application.Server.Models.CoworkingDatabase;
 using Application.Server.Models.DTOs.GetWorkspaces;
+using System.Security.Claims;
 
 namespace Application.Server.Controllers
 {
@@ -21,16 +22,18 @@ namespace Application.Server.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetWorkspaces()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetWorkspaces(int id)
         {
-            var response = await _coworkingDatabaseService.GetWorkspaces();
+            string? login = HttpContext.User.Claims.Where(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Select(x => x.Value).FirstOrDefault();
+
+            var response = await _coworkingDatabaseService.GetWorkspaces(login, id);
             switch (response.Status)
             {
                 case ResponseStatus.Ok:
-                    List<Workspace> workspaces = response.Data!;
-                    List<WorkspaceDto> workspaceDtos = workspaces.Select(_mapper.Map<WorkspaceDto>).ToList();
-                    return Ok(workspaceDtos);
+                    return Ok(response.Data!);
+                case ResponseStatus.BadRequest:
+                    return BadRequest();
                 default:
                     return StatusCode((int)HttpStatusCode.InternalServerError);
             }

@@ -1,3 +1,3 @@
 export const environment = {
-  server: 'localhost:7018'
+  server: '$API_URL'
 };

@@ -3,14 +3,20 @@ using AutoMapper;
 
 namespace Application.Server.Models.Mapper
 {
-    public class CoworkingProfile:Profile
+    public class CoworkingProfile : Profile
     {
         public CoworkingProfile()
         {
-            CreateMap<Workspace, DTOs.GetBooking.WorkspaceDto> ();
-            CreateMap<Booking, DTOs.GetBooking.BookingDto> ();
-            CreateMap<Workspace, DTOs.GetWorkspaces.WorkspaceDto> ();
-            CreateMap<Booking, DTOs.GetWorkspaces.BookingDto> ();
+            CreateMap<Coworking, DTOs.GetBookings.CoworkingDto>().ForMember(dest=> dest.Bookings, opt => opt.MapFrom(src => src.Workspaces.SelectMany(w=>w.Bookings).ToList()));
+            CreateMap<Workspace, DTOs.GetBookings.WorkspaceDto>();
+            CreateMap<Booking, DTOs.GetBookings.BookingDto>();
+
+            CreateMap<Workspace, DTOs.GetBooking.WorkspaceDto>();
+            CreateMap<Booking, DTOs.GetBooking.BookingDto>();
+
+            CreateMap<Coworking, DTOs.BookingQuestion.CoworkingDto>();
+            CreateMap<Workspace, DTOs.BookingQuestion.WorkspaceDto>();
+            CreateMap<Booking, DTOs.BookingQuestion.BookingDto>();
         }
     }
 }
