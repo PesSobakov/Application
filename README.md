@@ -7,6 +7,8 @@ dotnet dev-certs https --trust
 ```
 maybe you need to create folder "USERPROFILE\\.aspnet\https\" before that
 
+set environmental variable GROQ_API_KEY in docker-compose.yml
+
 after that run in command line
 ```
 docker-compose up -d --build
@@ -23,14 +25,9 @@ frontend will be available at http://localhost:8080
 backend
 ```
 DATABASE_CONNECTION_STRING: "Server=postgres_db:5432;Database=coworking;User Id=root;Password=password;TrustServerCertificate=True;"
+GROQ_API_KEY: "this is a secret that you shouldn't share"
 ```
 frontend
 ```
 API_URL: localhost:7018
-```
-frontend env variable not working for now so you need to change file environment.ts
-```
-export const environment = {
-  server: 'localhost:7018'
-};
 ```
