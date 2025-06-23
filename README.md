@@ -31,3 +31,18 @@ frontend
 ```
 API_URL: localhost:7018
 ```
+# Screenshots
+Coworking list
+![orange-stone-035c0c70f 6 azurestaticapps net_coworking-list](https://github.com/user-attachments/assets/88884ad3-f638-43ac-80e7-4dbaeed7f3d0)
+
+
+Coworking details
+![orange-stone-035c0c70f 6 azurestaticapps net_coworking-list (2)](https://github.com/user-attachments/assets/1bd5407f-fe88-4575-a5d6-1ec3f9ab4bbb)
+
+
+My bookings
+![orange-stone-035c0c70f 6 azurestaticapps net_coworking-list (1)](https://github.com/user-attachments/assets/72cad30e-b43b-4ce4-9f8d-81395bd0db1a)
+
+
+Booking form
+![orange-stone-035c0c70f 6 azurestaticapps net_coworking-list (4)](https://github.com/user-attachments/assets/918631ae-5bc5-444d-8d89-f252cb260081)
